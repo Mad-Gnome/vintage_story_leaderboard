@@ -1,0 +1,13 @@
+{
+    "type": "code",
+    "modid": "leaderstats",
+    "name": "Server Leaderstat Boards",
+    "authors": [
+        "codeAtorium"
+    ],
+    "description": "A set of leaderstats boards for servers.",
+    "version": "1.0.3",
+    "dependencies": {
+        "game": "1.19.*"
+    }
+}

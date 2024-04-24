@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34701.34
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeBuild", "CakeBuild\CakeBuild.csproj", "{F879D351-7CFF-4F90-A2D8-E4FBF5359D54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scoreboard_new", "scoreboard_new\scoreboard_new.csproj", "{C70D384E-93B3-4DEA-8BB8-8F9207CBA8FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F879D351-7CFF-4F90-A2D8-E4FBF5359D54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F879D351-7CFF-4F90-A2D8-E4FBF5359D54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F879D351-7CFF-4F90-A2D8-E4FBF5359D54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F879D351-7CFF-4F90-A2D8-E4FBF5359D54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C70D384E-93B3-4DEA-8BB8-8F9207CBA8FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C70D384E-93B3-4DEA-8BB8-8F9207CBA8FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C70D384E-93B3-4DEA-8BB8-8F9207CBA8FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C70D384E-93B3-4DEA-8BB8-8F9207CBA8FE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ACEA5D25-E841-4D57-9888-2A6DE3924BCC}
+	EndGlobalSection
+EndGlobal
