@@ -22,12 +22,24 @@ namespace scoreboard
             Title = "Ore (All Types) Mined";
             Init(GetKeyPrefix());
             Id = "ORE_ALLTYPES_MINED";
-            OverrideMethod = "None";
+            OverrideMethod = "DidBreakBlock";
         }
 
-        /*public override void OverrideCB()
+        public override void OverrideCB(IServerPlayer byPlayer, int oldblockId, BlockSelection blockSel)
         {
-            
-        }*/
+            Block block = sapi.World.BlockAccessor.GetBlock(oldblockId);
+            if (block == null) return;
+            if (block.Code == null) return;
+            string blockName = block.Code.ToString();
+            //sapi.Logger.Debug(blockName);
+            if(blockName.Contains("ore"))
+            {
+                string name = byPlayer?.Entity?.GetName();
+                if (name == null) return;
+                string key = GetKeyPrefix();
+                int oldValue = GetOldValue(key + name);
+                Process(key, oldValue + 1, name);
+            }
+        }
     }
 }

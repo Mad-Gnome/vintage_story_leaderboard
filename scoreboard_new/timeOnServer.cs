@@ -12,6 +12,7 @@ using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
+using Vintagestory.GameContent;
 
 namespace scoreboard
 {
@@ -25,22 +26,20 @@ namespace scoreboard
             Title = "Time on Server (mins)";
             Init(GetKeyPrefix());
             Id = "TIME_ON_SERVER";
-            OverrideMethod = "PlayerNowPlaying";
+            OverrideMethod = "None";
+            sapi.Event.RegisterGameTickListener(OnTick, 60 * 1000);
         }
 
-        public override void OverrideCB(IServerPlayer byPlayer)
+        private void OnTick(float dt)
         {
-            player = byPlayer;
-            int oldValue = GetOldValue(GetKeyPrefix() + player.Entity.GetName());
-            timeOnServer = oldValue;
-            if (debug) sapi.Logger.Debug("Already been on {0} minutes.", oldValue.ToString());
-            sapi.Event.RegisterGameTickListener(onTick, 60 * 1000);
-        }
-        private void onTick(float dt)
-        {
-            timeOnServer++;
-            Process(GetKeyPrefix(), timeOnServer, player.Entity.GetName());
-            if (debug) sapi.Logger.Debug("Just played another minute.");
+
+            foreach (IPlayer player in sapi.World.AllOnlinePlayers) {
+                string name = player?.Entity?.GetName();
+                if (name == null) return;
+                string key = GetKeyPrefix();
+                int oldValue = GetOldValue(key + name);
+                Process(key, oldValue + 1, name);
+            }
         }
     }
 }

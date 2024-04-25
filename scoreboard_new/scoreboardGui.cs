@@ -78,6 +78,7 @@ namespace scoreboard
                     string nameText = Stats[i * 2 + 0];
                     //nameText = GenerateRandomString(25);
                     nameText = TrimToCol(nameText, 450);
+                    if (nameText == "Empty") nameText = "-";
                     text += nameText + "\n";
                 }
                 else if (key == "VALUE")
@@ -86,6 +87,7 @@ namespace scoreboard
                     //replace with scientific notation 1.0e4
                     string valueText = Stats[i * 2 + 1];
                     //valueText = "9999999";
+                    if (valueText == "0") valueText = "";
                     if (valueText.Length > 6) valueText = ENotation(valueText);
                     text += valueText + "\n";
                 }
@@ -150,7 +152,7 @@ namespace scoreboard
            // capi.Logger.Debug("Setting new tabPages {0}", tabPages);
             GuiElementVerticalTabs tabsEl = SingleComposer.GetVerticalTab("tabs");
             if (Tab == "Deaths") tabsEl.SetValue(0);
-            else if (Tab == "Mining") tabsEl.SetValue(1);
+            else if (Tab == "Blocks") tabsEl.SetValue(1);
             else if (Tab == "Crafting/Smithing") tabsEl.SetValue(2);
             else if (Tab == "Server") tabsEl.SetValue(3);
             else tabsEl.SetValue(4);
@@ -209,7 +211,7 @@ namespace scoreboard
             tabs[1] = new GuiTab()
             {
                 DataInt = 1,
-                Name = "Mining"
+                Name = "Blocks"
 
             };
             tabs[2] = new GuiTab()

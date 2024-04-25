@@ -31,7 +31,8 @@ namespace scoreboard
             {
                 if (damageSource.SourceEntity != null && damageSource.SourceEntity is EntityPlayer)
                 {
-                    string name = byPlayer.Entity.GetName();
+                    string name = byPlayer?.Entity?.GetName();
+                    if (name == null) return;
                     string key = GetKeyPrefix();
                     int oldValue = GetOldValue(key + name);
                     Process(key, oldValue + 1, name);

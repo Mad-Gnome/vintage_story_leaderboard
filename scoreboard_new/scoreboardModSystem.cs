@@ -18,6 +18,7 @@ namespace scoreboard
     [HarmonyPatch] // Place on any class with harmony patches
     public class ScoreboardSystem : ModSystem
     {
+        ConfigSettings config;
         ICoreClientAPI capi;
         private ICoreServerAPI sapi;
        
@@ -27,6 +28,13 @@ namespace scoreboard
         public Harmony harmony;
         public override void Start(ICoreAPI api)
         {
+            config = api.LoadModConfig<ConfigSettings>("scoreboard.json");
+            if (config == null)
+            {
+                api.StoreModConfig(new ConfigSettings(), "scoreboard.json");
+                config = new ConfigSettings();
+            }
+
             api.Network.RegisterChannel("stat_request")
                 .RegisterMessageType(typeof(StatRequestResponse))
                 .RegisterMessageType(typeof(StatRequest))
@@ -43,7 +51,9 @@ namespace scoreboard
             base.StartClientSide(api);
             
             capi = api;
-            capi.Input.RegisterHotKey("scoreboardgui", "A scoreboard display.", GlKeys.U, HotkeyType.GUIOrOtherControls);
+            string abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            int i = abc.IndexOf(config.open_dialog_key.ToUpper());
+            capi.Input.RegisterHotKey("scoreboardgui", "A scoreboard display.", (GlKeys)(83 + i), HotkeyType.GUIOrOtherControls);
             capi.Input.SetHotKeyHandler("scoreboardgui", ToggleGui);
 
             api.Network.GetChannel("stat_request")
@@ -57,6 +67,7 @@ namespace scoreboard
         {
             api.Logger.Debug("SERVER START LEADERSTATS");
             this.sapi = api;
+            
             api.Network.GetChannel("stat_request")
                 .SetMessageHandler<StatRequest>(OnClientRequestStats);
             AddAllStats();
@@ -65,44 +76,38 @@ namespace scoreboard
         public void AddAllStats()
         {
             leaderStats = new ();
-            leaderStats["Deaths"] = new List<Leaderstat> {
-                new StatChickensKilled(sapi),               //done
-                new StatWolvesKilled(sapi),                 //done
-                new StatTimesDied(sapi),                    //done
-                new StatKilledByChicken(sapi),              //done
-                new StatKilledByWolf(sapi),                 //done
-                new StatKilledByDrowning(sapi),             //done
-                new StatKilledByFallDamage(sapi),           //done
-                new StatKilledByStarvation(sapi),           //done
-                new StatKilledByPlayers(sapi),              //done
-                new StatPlayersKilled(sapi),                //done
-            };
+            leaderStats["Deaths"] = new List<Leaderstat> {};
+            if(config.StatTimesDied) leaderStats["Deaths"].Add(new StatTimesDied(sapi));
+            if(config.StatChickensKilled) leaderStats["Deaths"].Add(new StatChickensKilled(sapi));
+            if(config.StatKilledByChicken) leaderStats["Deaths"].Add(new StatKilledByChicken(sapi));
+            if(config.StatWolvesKilled) leaderStats["Deaths"].Add(new StatWolvesKilled(sapi));
+            if(config.StatKilledByWolf) leaderStats["Deaths"].Add(new StatKilledByWolf(sapi));
+            if(config.StatPlayersKilled) leaderStats["Deaths"].Add(new StatPlayersKilled(sapi));
+            if(config.StatKilledByPlayers) leaderStats["Deaths"].Add(new StatKilledByPlayers(sapi));
+            if(config.StatKilledByDrowning) leaderStats["Deaths"].Add(new StatKilledByDrowning(sapi));
+            if(config.StatKilledByFallDamage) leaderStats["Deaths"].Add(new StatKilledByFallDamage(sapi));
+            if(config.StatKilledByStarvation) leaderStats["Deaths"].Add(new StatKilledByStarvation(sapi));
 
-            leaderStats["Mining"] = new List<Leaderstat> {
-                new StatBlocksBroken(sapi),                 //done
-                new StatBlocksPlaced(sapi),                 //done
-                new StatOreMined(sapi),
-            };
-            leaderStats["Crafting/Smithing"] = new List<Leaderstat>
-            {
-                new StatClayCrafted(sapi),              //done
-                new StatSmithingItemsCrafted(sapi),     //done
-                new StatChiselStrikes(sapi),            //done
-                new StatIngotsPoured(sapi),             //done
-                new StatToolsNapped(sapi),              //done
-                //new StatLeatherCrafted(sapi),           //?
-            };
-            leaderStats["Server"] = new List<Leaderstat>
-            {
-                new StatChatWordsSent(sapi),            //done
-                new StatTimeOnServer(sapi),             //done
-            };
-            leaderStats["Misc"] = new List<Leaderstat>
-            {
-                //new StatDeepestAveDepth(sapi),        //this won't really work because a value can't go back and forth
-                new StatDistanceWalked(sapi),           //done
-            };
-            
+            leaderStats["Blocks"] = new List<Leaderstat> {};
+            if (config.StatBlocksBroken) leaderStats["Blocks"].Add(new StatBlocksBroken(sapi));
+            if (config.StatBlocksPlaced) leaderStats["Blocks"].Add(new StatBlocksPlaced(sapi));
+            if (config.StatOreMined) leaderStats["Blocks"].Add(new StatOreMined(sapi));
+            if (config.StatTreesChopped) leaderStats["Blocks"].Add(new StatTreesChopped(sapi));
+
+            leaderStats["Crafting/Smithing"] = new List<Leaderstat> {};
+            if (config.StatToolsNapped) leaderStats["Crafting/Smithing"].Add(new StatToolsNapped(sapi));
+            if (config.StatClayCrafted) leaderStats["Crafting/Smithing"].Add(new StatClayCrafted(sapi));
+            if (config.StatIngotsPoured) leaderStats["Crafting/Smithing"].Add(new StatIngotsPoured(sapi));
+            if (config.StatSmithingItemsCrafted) leaderStats["Crafting/Smithing"].Add(new StatSmithingItemsCrafted(sapi));
+            if (config.StatChiselStrikes) leaderStats["Crafting/Smithing"].Add(new StatChiselStrikes(sapi));
+
+            leaderStats["Server"] = new List<Leaderstat>{};
+            if (config.StatTimeOnServer) leaderStats["Server"].Add(new StatTimeOnServer(sapi));
+            if (config.StatChatWordsSent) leaderStats["Server"].Add(new StatChatWordsSent(sapi));
+
+            leaderStats["Misc"] = new List<Leaderstat>{};
+            if (config.StatDistanceWalked) leaderStats["Misc"].Add(new StatDistanceWalked(sapi));
+
 
             foreach (string tab in leaderStats.Keys)
             {

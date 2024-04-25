@@ -27,7 +27,8 @@ namespace scoreboard
 
         public override void OverrideCB(IServerPlayer byPlayer, DamageSource damageSource)
         {
-            string name = byPlayer.Entity.GetName();
+            string name = byPlayer?.Entity?.GetName();
+            if (name == null) return;
             string key = GetKeyPrefix();
             int oldValue = GetOldValue(key + name);
             if (damageSource == null || damageSource.Type.ToString() != "Gravity") return;

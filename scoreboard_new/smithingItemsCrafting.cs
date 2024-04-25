@@ -41,7 +41,8 @@ namespace scoreboard
             {
                 if (byPlayer == null || byPlayer.Entity == null) return;
                 string key = me.GetKeyPrefix();
-                string name = byPlayer.Entity.GetName();
+                string name = byPlayer?.Entity?.GetName();
+                if (name == null) return;
                 int oldValue = me.GetOldValue(key + name);
                 me.Process(key, oldValue + 1, name);
                 if (debug) __instance.Api.Logger.Debug("All done! {0}", byPlayer.Entity.GetName());
