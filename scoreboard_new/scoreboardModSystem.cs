@@ -11,6 +11,7 @@ using ProtoBuf;
 using Vintagestory.API.Util;
 using Vintagestory.API.MathTools;
 using HarmonyLib;
+using Vintagestory.GameContent;
 namespace scoreboard
 {
 
@@ -86,8 +87,10 @@ namespace scoreboard
             {
                 new StatClayCrafted(sapi),              //done
                 new StatSmithingItemsCrafted(sapi),     //done
-                new StatLeatherCrafted(sapi),           //?
-                new StatIngotsCrafted(sapi),            //?
+                new StatChiselStrikes(sapi),            //done
+                new StatIngotsPoured(sapi),             //done
+                new StatToolsNapped(sapi),              //done
+                //new StatLeatherCrafted(sapi),           //?
             };
             leaderStats["Server"] = new List<Leaderstat>
             {
