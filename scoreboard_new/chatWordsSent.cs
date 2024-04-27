@@ -31,7 +31,7 @@ namespace scoreboard
         public override void OverrideCB(IServerPlayer byPlayer, int channelId, ref string message, ref string data, BoolRef consumed)
         {
             int wordCount = GetOldValue(GetKeyPrefix() + byPlayer.Entity.GetName());
-            wordCount += message.Split(" ").Length;
+            wordCount += message.Split(" ").Length-1; //don't count username
             int avoCount = Regex.Matches(message.ToLower(), "avocado").Count; //use this to count a specific word
             Process(GetKeyPrefix(), wordCount, byPlayer.Entity.GetName());
         }

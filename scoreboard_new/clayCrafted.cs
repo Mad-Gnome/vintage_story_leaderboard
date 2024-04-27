@@ -35,6 +35,7 @@ namespace scoreboard
         [HarmonyPatch(typeof(BlockEntityClayForm), "CheckIfFinished")]
         public static void CheckIfFinished(BlockEntityClayForm __instance, IPlayer byPlayer, int layer)
         {
+            if (__instance?.Api?.Side == null) return;
             if (__instance.Api.Side.IsClient()) return;
 
             if(__instance.SelectedRecipe == null)

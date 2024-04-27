@@ -46,6 +46,7 @@ namespace scoreboard
         [HarmonyPatch(typeof(BlockEntityIngotMold), "ReceiveLiquidMetal")]
         public static void ReceiveLiquidMetalAfter(BlockEntityIngotMold __instance,  ItemStack metal, ref int amount, float temperature, bool __state)
         {
+            if (__instance?.Api?.Side == null) return;
             if (__instance.Api.Side.IsClient()) return;
             bool filled;
             if (__instance.fillSide) filled = __instance.fillLevelRight == 100;

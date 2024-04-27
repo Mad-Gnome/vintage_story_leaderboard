@@ -35,14 +35,17 @@ namespace scoreboard
         [HarmonyPatch(typeof(BlockEntityAnvil), "CheckIfFinished")]
         public static void CheckIfFinished(BlockEntityAnvil __instance, IPlayer byPlayer)
         {
+            if (__instance?.Api?.Side == null) return;
             if (__instance.Api.Side.IsClient()) return;
            
             if (__instance.WorkItemStack == null)
             {
+                __instance.Api.Logger.Debug("Smithed item");
                 if (byPlayer == null || byPlayer.Entity == null) return;
                 string key = me.GetKeyPrefix();
                 string name = byPlayer?.Entity?.GetName();
                 if (name == null) return;
+                __instance.Api.Logger.Debug("Smithed item {0}", byPlayer.Entity.GetName());
                 int oldValue = me.GetOldValue(key + name);
                 me.Process(key, oldValue + 1, name);
                 if (debug) __instance.Api.Logger.Debug("All done! {0}", byPlayer.Entity.GetName());

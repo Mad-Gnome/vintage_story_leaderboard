@@ -93,6 +93,8 @@ namespace scoreboard
             if (config.StatBlocksPlaced) leaderStats["Blocks"].Add(new StatBlocksPlaced(sapi));
             if (config.StatOreMined) leaderStats["Blocks"].Add(new StatOreMined(sapi));
             if (config.StatTreesChopped) leaderStats["Blocks"].Add(new StatTreesChopped(sapi));
+            //leaderStats["Blocks"].Add(new StatGrassHarvested(sapi));
+            //leaderStats["Blocks"].Add(new StatBlocksBurned(sapi));
 
             leaderStats["Crafting/Smithing"] = new List<Leaderstat> {};
             if (config.StatToolsNapped) leaderStats["Crafting/Smithing"].Add(new StatToolsNapped(sapi));
@@ -107,6 +109,8 @@ namespace scoreboard
 
             leaderStats["Misc"] = new List<Leaderstat>{};
             if (config.StatDistanceWalked) leaderStats["Misc"].Add(new StatDistanceWalked(sapi));
+            
+            
 
 
             foreach (string tab in leaderStats.Keys)

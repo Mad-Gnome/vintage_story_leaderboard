@@ -36,6 +36,7 @@ namespace scoreboard
         [HarmonyPatch(typeof(ItemAxe), "OnBlockBrokenWith")]
         public static void OnBlockBrokenWith(ItemAxe __instance, IWorldAccessor world, Entity byEntity, ItemSlot itemslot, BlockSelection blockSel, float dropQuantityMultiplier = 1)
         {
+            if (me?.sapi?.Side == null) return;
             if (me.sapi.Side.IsClient()) return;
             Stack<BlockPos> foundPositions = __instance.FindTree(world, blockSel.Position, out int _, out int woodTier);
             

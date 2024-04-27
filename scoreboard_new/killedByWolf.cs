@@ -41,13 +41,14 @@ namespace scoreboard
                     killer = damageSource.SourceEntity.GetName();
                 }
             }
+            sapi.Logger.Debug(killer);
             List<string> animals = new List<string>
             { "Wolf (male)", "Wolf (female)", "Wolf (pup)" };
             if (!animals.Contains(killer)) return;
             string killed = entity.GetName();
-            string key = GetKeyPrefix() ;
-            int oldValue = GetOldValue(key + killer);
-            Process(key, oldValue + 1, killer);
+            string key = GetKeyPrefix();
+            int oldValue = GetOldValue(key + killed);
+            Process(key, oldValue + 1, killed);
         }
     }
 }

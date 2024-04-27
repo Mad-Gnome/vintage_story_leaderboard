@@ -23,7 +23,9 @@ namespace scoreboard
         int timeOnServer;
         public StatTimeOnServer(ICoreServerAPI api) : base(api)
         {
-            Title = "Time on Server (mins)";
+            if (api?.Side == null) return;
+            if (api.Side.IsClient()) return;
+            Title = "Minutes on Server";
             Init(GetKeyPrefix());
             Id = "TIME_ON_SERVER";
             OverrideMethod = "None";
@@ -32,10 +34,11 @@ namespace scoreboard
 
         private void OnTick(float dt)
         {
-
+            if (sapi?.Side == null) return;
+            if (sapi.Side.IsClient()) return;
             foreach (IPlayer player in sapi.World.AllOnlinePlayers) {
                 string name = player?.Entity?.GetName();
-                if (name == null) return;
+                if (name == null) continue;
                 string key = GetKeyPrefix();
                 int oldValue = GetOldValue(key + name);
                 Process(key, oldValue + 1, name);

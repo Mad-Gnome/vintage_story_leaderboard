@@ -47,9 +47,10 @@ namespace scoreboard
             { "Hen", "Rooster", "Chick" };
             
             if (!animals.Contains(killer)) return;
-            string key = GetKeyPrefix() ;
-            int oldValue = GetOldValue(key + killer);
-            Process(key, oldValue + 1, killer);
+            string killed = entity.GetName();
+            string key = GetKeyPrefix();
+            int oldValue = GetOldValue(key + killed);
+            Process(key, oldValue + 1, killed);
         }
     }
 }

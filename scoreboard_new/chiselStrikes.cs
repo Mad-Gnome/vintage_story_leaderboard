@@ -36,6 +36,7 @@ namespace scoreboard
         [HarmonyPatch(typeof(BlockEntityChisel), "UpdateVoxel")]
         public static void UpdateVoxel(BlockEntityChisel __instance, IPlayer byPlayer, ItemSlot itemslot, Vec3i voxelPos, BlockFacing facing, bool isBreak)
         {
+            if (__instance?.Api?.Side == null) return;
             if (__instance.Api.Side.IsClient()) return;
 
             var slot = byPlayer?.InventoryManager?.ActiveHotbarSlot;

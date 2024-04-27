@@ -35,6 +35,7 @@ namespace scoreboard
         [HarmonyPatch(typeof(BlockEntityKnappingSurface), "CheckIfFinished")]
         public static void CheckIfFinished(BlockEntityKnappingSurface __instance, IPlayer byPlayer)
         {
+            if (__instance?.Api?.Side == null) return;
             if (__instance.Api.Side.IsClient()) return;
 
             if(__instance.SelectedRecipe == null)
