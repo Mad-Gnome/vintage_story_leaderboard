@@ -12,6 +12,10 @@ using Vintagestory.API.Util;
 using Vintagestory.API.MathTools;
 using HarmonyLib;
 using Vintagestory.GameContent;
+using System.Diagnostics;
+using System.Numerics;
+using System.Reflection;
+using System.Xml;
 namespace scoreboard
 {
 
@@ -29,11 +33,17 @@ namespace scoreboard
         public override void Start(ICoreAPI api)
         {
             config = api.LoadModConfig<ConfigSettings>("scoreboard.json");
-            if (config == null)
+            if (config == null || config.stats == null)
             {
-                api.StoreModConfig(new ConfigSettings(), "scoreboard.json");
                 config = new ConfigSettings();
             }
+
+            ConfigSettings baseConfig = new();
+            foreach (KeyValuePair<string, bool> entry in baseConfig.stats)
+            {
+                if (!config.stats.ContainsKey(entry.Key)) config.stats[entry.Key] = true;
+            }
+            api.StoreModConfig(config, "scoreboard.json");
 
             api.Network.RegisterChannel("stat_request")
                 .RegisterMessageType(typeof(StatRequestResponse))
@@ -51,9 +61,7 @@ namespace scoreboard
             base.StartClientSide(api);
             
             capi = api;
-            string abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            int i = abc.IndexOf(config.open_dialog_key.ToUpper());
-            capi.Input.RegisterHotKey("scoreboardgui", "A scoreboard display.", (GlKeys)(83 + i), HotkeyType.GUIOrOtherControls);
+            capi.Input.RegisterHotKey("scoreboardgui", "A scoreboard display.", GlKeys.U, HotkeyType.GUIOrOtherControls);
             capi.Input.SetHotKeyHandler("scoreboardgui", ToggleGui);
 
             api.Network.GetChannel("stat_request")
@@ -71,46 +79,54 @@ namespace scoreboard
             api.Network.GetChannel("stat_request")
                 .SetMessageHandler<StatRequest>(OnClientRequestStats);
             AddAllStats();
+            sapi.Event.PlayerNowPlaying += SchedulePromotion;
         }
 
+        public void SchedulePromotion(IServerPlayer player)
+        {
+            if(config.stats["AllowPromotion"]) new Promotion(player, sapi);
+        }
+
+        
         public void AddAllStats()
         {
             leaderStats = new ();
             leaderStats["Deaths"] = new List<Leaderstat> {};
-            if(config.StatTimesDied) leaderStats["Deaths"].Add(new StatTimesDied(sapi));
-            if(config.StatChickensKilled) leaderStats["Deaths"].Add(new StatChickensKilled(sapi));
-            if(config.StatKilledByChicken) leaderStats["Deaths"].Add(new StatKilledByChicken(sapi));
-            if(config.StatWolvesKilled) leaderStats["Deaths"].Add(new StatWolvesKilled(sapi));
-            if(config.StatKilledByWolf) leaderStats["Deaths"].Add(new StatKilledByWolf(sapi));
-            if(config.StatPlayersKilled) leaderStats["Deaths"].Add(new StatPlayersKilled(sapi));
-            if(config.StatKilledByPlayers) leaderStats["Deaths"].Add(new StatKilledByPlayers(sapi));
-            if(config.StatKilledByDrowning) leaderStats["Deaths"].Add(new StatKilledByDrowning(sapi));
-            if(config.StatKilledByFallDamage) leaderStats["Deaths"].Add(new StatKilledByFallDamage(sapi));
-            if(config.StatKilledByStarvation) leaderStats["Deaths"].Add(new StatKilledByStarvation(sapi));
+            if(config.stats["StatTimesDied"]) leaderStats["Deaths"].Add(new StatTimesDied(sapi));
+            if(config.stats["StatChickensKilled"]) leaderStats["Deaths"].Add(new StatChickensKilled(sapi));
+            if(config.stats["StatKilledByChicken"]) leaderStats["Deaths"].Add(new StatKilledByChicken(sapi));
+            if(config.stats["StatWolvesKilled"]) leaderStats["Deaths"].Add(new StatWolvesKilled(sapi));
+            if(config.stats["StatKilledByWolf"]) leaderStats["Deaths"].Add(new StatKilledByWolf(sapi));
+            if(config.stats["StatPlayersKilled"]) leaderStats["Deaths"].Add(new StatPlayersKilled(sapi));
+            if(config.stats["StatKilledByPlayers"]) leaderStats["Deaths"].Add(new StatKilledByPlayers(sapi));
+            if(config.stats["StatKilledByDrowning"]) leaderStats["Deaths"].Add(new StatKilledByDrowning(sapi));
+            if(config.stats["StatKilledByFallDamage"]) leaderStats["Deaths"].Add(new StatKilledByFallDamage(sapi));
+            if(config.stats["StatKilledByStarvation"]) leaderStats["Deaths"].Add(new StatKilledByStarvation(sapi));
 
             leaderStats["Blocks"] = new List<Leaderstat> {};
-            if (config.StatBlocksBroken) leaderStats["Blocks"].Add(new StatBlocksBroken(sapi));
-            if (config.StatBlocksPlaced) leaderStats["Blocks"].Add(new StatBlocksPlaced(sapi));
-            if (config.StatOreMined) leaderStats["Blocks"].Add(new StatOreMined(sapi));
-            if (config.StatTreesChopped) leaderStats["Blocks"].Add(new StatTreesChopped(sapi));
-            //leaderStats["Blocks"].Add(new StatGrassHarvested(sapi));
-            //leaderStats["Blocks"].Add(new StatBlocksBurned(sapi));
+            if (config.stats["StatBlocksBroken"]) leaderStats["Blocks"].Add(new StatBlocksBroken(sapi));
+            if (config.stats["StatBlocksPlaced"]) leaderStats["Blocks"].Add(new StatBlocksPlaced(sapi));
+            if (config.stats["StatOreMined"]) leaderStats["Blocks"].Add(new StatOreMined(sapi));
+            if (config.stats["StatTreesChopped"]) leaderStats["Blocks"].Add(new StatTreesChopped(sapi));
+            if (config.stats["StatGrassHarvested"])  leaderStats["Blocks"].Add(new StatGrassHarvested(sapi));
+            
 
             leaderStats["Crafting/Smithing"] = new List<Leaderstat> {};
-            if (config.StatToolsNapped) leaderStats["Crafting/Smithing"].Add(new StatToolsNapped(sapi));
-            if (config.StatClayCrafted) leaderStats["Crafting/Smithing"].Add(new StatClayCrafted(sapi));
-            if (config.StatIngotsPoured) leaderStats["Crafting/Smithing"].Add(new StatIngotsPoured(sapi));
-            if (config.StatSmithingItemsCrafted) leaderStats["Crafting/Smithing"].Add(new StatSmithingItemsCrafted(sapi));
-            if (config.StatChiselStrikes) leaderStats["Crafting/Smithing"].Add(new StatChiselStrikes(sapi));
+            if (config.stats["StatToolsNapped"]) leaderStats["Crafting/Smithing"].Add(new StatToolsNapped(sapi));
+            if (config.stats["StatClayCrafted"]) leaderStats["Crafting/Smithing"].Add(new StatClayCrafted(sapi));
+            if (config.stats["StatIngotsPoured"]) leaderStats["Crafting/Smithing"].Add(new StatIngotsPoured(sapi));
+            if (config.stats["StatSmithingItemsCrafted"]) leaderStats["Crafting/Smithing"].Add(new StatSmithingItemsCrafted(sapi));
+            if (config.stats["StatChiselStrikes"]) leaderStats["Crafting/Smithing"].Add(new StatChiselStrikes(sapi));
 
             leaderStats["Server"] = new List<Leaderstat>{};
-            if (config.StatTimeOnServer) leaderStats["Server"].Add(new StatTimeOnServer(sapi));
-            if (config.StatChatWordsSent) leaderStats["Server"].Add(new StatChatWordsSent(sapi));
+            if (config.stats["StatTimeOnServer"]) leaderStats["Server"].Add(new StatTimeOnServer(sapi));
+            if (config.stats["StatChatWordsSent"]) leaderStats["Server"].Add(new StatChatWordsSent(sapi));
 
             leaderStats["Misc"] = new List<Leaderstat>{};
-            if (config.StatDistanceWalked) leaderStats["Misc"].Add(new StatDistanceWalked(sapi));
-            
-            
+            if (config.stats["StatDistanceWalked"]) leaderStats["Misc"].Add(new StatDistanceWalked(sapi));
+            if (config.stats["StatBlocksBurned"]) leaderStats["Misc"].Add(new StatBlocksBurned(sapi));
+
+
 
 
             foreach (string tab in leaderStats.Keys)
@@ -164,12 +180,6 @@ namespace scoreboard
 
             }
             
-            //OnCreatedByCrafting(ItemSlot[], ItemSlot, GridRecipe)
-
-
-            //sapi.Event.DidBreakBlock
-            //sapi.Event.DidPlaceBlock
-            //sapi.Event.DidUseBlock
         }
         private bool ToggleGui(KeyCombination comb)
         {

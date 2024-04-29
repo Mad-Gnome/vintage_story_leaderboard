@@ -30,8 +30,8 @@ namespace scoreboard
             Block block = sapi.World.BlockAccessor.GetBlock(oldblockId);
             if (block == null) return;
             if (block.Code == null) return;
+            
             string blockName = block.Code.ToString();
-            //sapi.Logger.Debug(blockName);
             if(blockName.Contains("ore"))
             {
                 string name = byPlayer?.Entity?.GetName();

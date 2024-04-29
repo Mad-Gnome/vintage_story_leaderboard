@@ -62,5 +62,37 @@ namespace scoreboard
                 me.Process(key, oldValue + 1, name);
             }
         }
+
+        //this is to add compatibility with https://mods.vintagestory.at/moremolds
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(BlockEntityToolMold), "ReceiveLiquidMetal")]
+        public static void ReceiveLiquidMetalBeforeYabba(BlockEntityToolMold __instance, ItemStack metal, ref int amount, float temperature, out bool __state)
+        {
+            __state = __instance.IsFull;
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(BlockEntityToolMold), "ReceiveLiquidMetal")]
+        public static void ReceiveLiquidMetalAfterYabba(BlockEntityToolMold __instance, ItemStack metal, ref int amount, float temperature, bool __state)
+        {
+            if (__instance?.Api?.Side == null) return;
+            if (__instance.Api.Side.IsClient()) return;
+            if (__state == false && __instance.IsFull)
+            {
+                if (__instance.Api.Side.IsClient()) return;
+                string code = __instance?.Block?.Code?.ToString();
+                if(code==null) return;
+                int quant = 0;
+                if (code.Contains("bulk_ingotmold_24")) quant = 24;
+                else if (code.Contains("bulk_ingotmold")) quant = 12;
+                else return;
+                IPlayer byPlayer = __instance.Api.World.NearestPlayer(__instance.Pos.X, __instance.Pos.Y, __instance.Pos.Z);
+                string name = byPlayer?.Entity?.GetName();
+                if (name == null) return;
+                string key = me.GetKeyPrefix();
+                int oldValue = me.GetOldValue(key + name);
+                me.Process(key, oldValue + quant, name);
+            }
+        }
     }
 }

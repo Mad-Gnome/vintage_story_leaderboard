@@ -17,6 +17,7 @@ namespace scoreboard
         // Property to hold the core server API instance
         protected ICoreServerAPI sapi;
         public List<Leader> leaders = new();
+        public string Ver = "";
         // Constructor to initialize the core server API instance
         public Leaderstat(ICoreServerAPI api)
         {
@@ -93,7 +94,7 @@ namespace scoreboard
 
         public string GetKeyPrefix()
         {
-            return "scoreboard;" + Title + ";";
+            return "scoreboard;" + Title + ";" + Ver;
         }
 
 

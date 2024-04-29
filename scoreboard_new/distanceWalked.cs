@@ -25,6 +25,7 @@ namespace scoreboard
             if (api?.Side == null) return;
             if (api.Side.IsClient()) return;
             Title = "Blocks Walked";
+            sapi.Logger.Debug("distance walked key {0}", GetKeyPrefix());
             Init(GetKeyPrefix());
             Id = "DISTANCE_WALKED";
             OverrideMethod = "PlayerNowPlaying";
@@ -46,6 +47,7 @@ namespace scoreboard
             if (sapi.Side.IsClient()) return;
             foreach (IPlayer player in sapi.World.AllOnlinePlayers)
             {
+                if (player?.Entity == null) continue;
                 string name = player?.Entity?.GetName();
                 if (name == null) continue;
                 if (player?.Entity?.ServerPos == null) continue;
@@ -67,7 +69,7 @@ namespace scoreboard
                 }
                 
                 
-                Process(key, value + 1, name);
+                Process(key, value, name);
                 positions[player.PlayerUID] = newVec;
             }
             
