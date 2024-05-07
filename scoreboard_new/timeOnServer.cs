@@ -12,6 +12,7 @@ using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
+using Vintagestory.Common;
 using Vintagestory.GameContent;
 
 namespace scoreboard
@@ -29,20 +30,28 @@ namespace scoreboard
             Init(GetKeyPrefix());
             Id = "TIME_ON_SERVER";
             OverrideMethod = "None";
+            sapi = api;
             sapi.Event.RegisterGameTickListener(OnTick, 60 * 1000);
+            
         }
 
         private void OnTick(float dt)
         {
-            if (sapi?.Side == null) return;
-            if (sapi.Side.IsClient()) return;
-            foreach (IPlayer player in sapi.World.AllOnlinePlayers) {
-                string name = player?.Entity?.GetName();
-                if (name == null) continue;
-                string key = GetKeyPrefix();
-                int oldValue = GetOldValue(key + name);
-                Process(key, oldValue + 1, name);
+            try
+            {
+                foreach (IPlayer player in sapi.World.AllOnlinePlayers)
+                {
+                    string name = player?.Entity?.GetName();
+                    if (name == null) continue;
+                    string key = GetKeyPrefix();
+                    int oldValue = GetOldValue(key + name);
+                    Process(key, oldValue + 1, name);
+                }
+            } catch (Exception e)
+            {
+
             }
+            
         }
     }
 }

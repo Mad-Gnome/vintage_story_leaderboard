@@ -24,6 +24,7 @@ namespace scoreboard
         {
             if (api?.Side == null) return;
             if (api.Side.IsClient()) return;
+            sapi = api;
             Title = "Blocks Walked";
             sapi.Logger.Debug("distance walked key {0}", GetKeyPrefix());
             Init(GetKeyPrefix());
@@ -43,34 +44,40 @@ namespace scoreboard
 
         private void onTick(float dt)
         {
-            if (sapi?.Side == null) return;
-            if (sapi.Side.IsClient()) return;
             foreach (IPlayer player in sapi.World.AllOnlinePlayers)
             {
-                if (player?.Entity == null) continue;
-                string name = player?.Entity?.GetName();
-                if (name == null) continue;
-                if (player?.Entity?.ServerPos == null) continue;
-                if (!positions.ContainsKey(player.PlayerUID)) continue;
-                EntityPos curEntPos = player?.Entity?.ServerPos;
-                if(curEntPos == null) continue;
-                FastVec3d newVec = new(curEntPos.X, curEntPos.Y, curEntPos.Z);
-                FastVec3d oldPos = positions[player.PlayerUID];
-                if(debug) sapi.Logger.Debug("old: {0} {1} {2} ", oldPos.X, oldPos.Y, oldPos.Z);
-                if(debug) sapi.Logger.Debug("new: {0} {1} {2} ", curEntPos.X, curEntPos.Y, curEntPos.Z);
-                double newDist = newVec.Distance(oldPos);
-                string key = GetKeyPrefix();
-                int value = GetOldValue(key + name);
-                if (newDist < 100) //ignore impossible distances
+                try
                 {
-                    value += (int)newDist;
-                    Process(GetKeyPrefix(), (int)value, player.Entity.GetName());
-                    if (debug) sapi.Logger.Debug("{0} Just walked {1}", name, newDist.ToString());
+                    if (player?.Entity == null) continue;
+                    string name = player?.Entity?.GetName();
+                    if (name == null) continue;
+                    if (player?.Entity?.ServerPos == null) continue;
+                    if (!positions.ContainsKey(player.PlayerUID)) continue;
+                    EntityPos curEntPos = player?.Entity?.ServerPos;
+                    if (curEntPos == null) continue;
+                    FastVec3d newVec = new(curEntPos.X, curEntPos.Y, curEntPos.Z);
+                    FastVec3d oldPos = positions[player.PlayerUID];
+                    if (debug) sapi.Logger.Debug("old: {0} {1} {2} ", oldPos.X, oldPos.Y, oldPos.Z);
+                    if (debug) sapi.Logger.Debug("new: {0} {1} {2} ", curEntPos.X, curEntPos.Y, curEntPos.Z);
+                    double newDist = newVec.Distance(oldPos);
+                    string key = GetKeyPrefix();
+                    int value = GetOldValue(key + name);
+                    if (newDist < 100) //ignore impossible distances
+                    {
+                        value += (int)newDist;
+                        Process(GetKeyPrefix(), (int)value, player.Entity.GetName());
+                        if (debug) sapi.Logger.Debug("{0} Just walked {1}", name, newDist.ToString());
+                    }
+
+
+                    Process(key, value, name);
+                    positions[player.PlayerUID] = newVec;
+                }
+                catch (Exception e)
+                {
+
                 }
                 
-                
-                Process(key, value, name);
-                positions[player.PlayerUID] = newVec;
             }
             
 

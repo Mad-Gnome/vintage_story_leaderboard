@@ -25,7 +25,8 @@ namespace scoreboard
             
             for (int i = 0; i < 10; i++)
             {
-                leaders.Add(new Leader("Empty", 0));          }
+                leaders.Add(new Leader("Empty", 0));          
+            }
         }
 
         public void Init(string prefix)
