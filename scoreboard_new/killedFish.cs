@@ -15,33 +15,38 @@ using Vintagestory.API.Util;
 
 namespace scoreboard
 {
-    public class StatWolvesKilled: Leaderstat
+    public class StatKilledFish : Leaderstat
     {
         private bool debug = false;
-        public StatWolvesKilled(ICoreServerAPI api) : base(api)
+        public StatKilledFish (ICoreServerAPI api) : base(api)
         {
-            Title = "Most Wolves Killed";
+            Title = "Most Fish Killed";
             Init(GetKeyPrefix());
-            Id = "MOST_WOLVES_KILLED";
+            Id = "MOST_FISH_KILLED";
             OverrideMethod = "OnEntityDeath";
         }
 
         public override void OverrideCB(Entity entity, DamageSource damageSource)
         {
             List<string> animals = new List<string>
-            { "Dead wolf (male)", "Dead wolf (female)", "Dead wolf (pup)" };
-            if (!animals.Contains(entity.GetName())) return;
+            { "game:salmon", "somethinginthewater:moonjelly", "somethinginthewater:sunfish" };
+            if (debug) sapi.Logger.Debug("scoreboard logline!");
+            if (debug) sapi.Logger.Debug(entity.Code.ToString());
+            if (debug) sapi.Logger.Debug(entity.GetName());
+
+
+            if (!animals.Contains(entity.Code.ToString())) return;
             string killedByName = null;
             if (damageSource != null)
             {
-                if (damageSource.SourceEntity == null)
+                if (damageSource.GetCauseEntity() == null)
                 {
                     killedByName = null;
                 }
                 else
                 {
-                    if (damageSource.SourceEntity is not EntityPlayer) return; //make sure it's a player
-                    killedByName = damageSource.SourceEntity.GetName(); //the killer
+                    if (damageSource.GetCauseEntity() is not EntityPlayer) return; //make sure it's a player
+                    killedByName = damageSource.GetCauseEntity().GetName(); //the killer
                 }
             }
             

@@ -14,24 +14,24 @@ using Vintagestory.API.Util;
 
 namespace scoreboard
 {
-    public class StatPlayersKilled: Leaderstat
+    public class StatKilledPlayer : Leaderstat
     {
         private bool debug = false;
-        public StatPlayersKilled(ICoreServerAPI api) : base(api)
+        public StatKilledPlayer(ICoreServerAPI api) : base(api)
         {
             Title = "Other Players Killed";
             Init(GetKeyPrefix());
-            Id = "PLAYERS_KILLED";
+            Id = "PLAYER_KILLED";
             OverrideMethod = "OnEntityDeath";
         }
 
         public override void OverrideCB(Entity entity, DamageSource damageSource)
         {
             if (entity is not EntityPlayer) return;
-            if (damageSource.SourceEntity != null && damageSource.SourceEntity is EntityPlayer)
+            if (damageSource.GetCauseEntity() != null && damageSource.GetCauseEntity() is EntityPlayer)
             {
                 string key = GetKeyPrefix();
-                string killedByName = damageSource.SourceEntity.GetName();
+                string killedByName = damageSource.GetCauseEntity().GetName();
                 int oldValue = GetOldValue(key + killedByName); //append player name to getoldvalue
                 Process(key, oldValue + 1, killedByName);
             }

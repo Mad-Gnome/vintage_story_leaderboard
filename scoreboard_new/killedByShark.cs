@@ -15,15 +15,15 @@ using Vintagestory.API.Util;
 
 namespace scoreboard
 {
-    public class StatKilledByChicken: Leaderstat
+    public class StatKilledByShark: Leaderstat
     {
         private bool debug = false;
         
-        public StatKilledByChicken(ICoreServerAPI api) : base(api)
+        public StatKilledByShark(ICoreServerAPI api) : base(api)
         {
-            Title = "Died to Chickens";
+            Title = "Died to Sharks";
             Init(GetKeyPrefix());
-            Id = "MOST_KILLED_BY_CHICKEN";
+            Id = "MOST_KILLED_BY_SHARK";
             OverrideMethod = "OnEntityDeath";
 
         }
@@ -43,12 +43,11 @@ namespace scoreboard
                 {
                     killer = damageSource.SourceEntity.Code.ToString();
                     if (debug) sapi.Logger.Debug("scoreboard logline!");
-                    if (debug) sapi.Logger.Debug(damageSource.SourceEntity.GetName());
                     if (debug) sapi.Logger.Debug(damageSource.SourceEntity.Code.ToString());
                 }
             }
 
-            if (!killer.Contains("chicken")) return;
+            if (!killer.Contains("shark")) return;
             string killed = entity.GetName();
             string key = GetKeyPrefix();
             int oldValue = GetOldValue(key + killed);

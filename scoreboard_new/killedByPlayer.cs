@@ -14,14 +14,14 @@ using Vintagestory.API.Util;
 
 namespace scoreboard
 {
-    public class StatKilledByPlayers: Leaderstat
+    public class StatKilledByPlayer: Leaderstat
     {
         private bool debug = false;
-        public StatKilledByPlayers(ICoreServerAPI api) : base(api)
+        public StatKilledByPlayer(ICoreServerAPI api) : base(api)
         {
             Title = "Killed by Other Players";
             Init(GetKeyPrefix());
-            Id = "KILLED_BY_PLAYERS";
+            Id = "KILLED_BY_PLAYER";
             OverrideMethod = "PlayerDeath";
         }
 

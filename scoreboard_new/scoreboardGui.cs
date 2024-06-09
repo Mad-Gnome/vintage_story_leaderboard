@@ -152,10 +152,11 @@ namespace scoreboard
            // capi.Logger.Debug("Setting new tabPages {0}", tabPages);
             GuiElementVerticalTabs tabsEl = SingleComposer.GetVerticalTab("tabs");
             if (Tab == "Deaths") tabsEl.SetValue(0);
-            else if (Tab == "Blocks") tabsEl.SetValue(1);
-            else if (Tab == "Crafting/Smithing") tabsEl.SetValue(2);
-            else if (Tab == "Server") tabsEl.SetValue(3);
-            else tabsEl.SetValue(4);
+            else if (Tab == "Kills") tabsEl.SetValue(1);
+            else if (Tab == "Blocks") tabsEl.SetValue(2);
+            else if (Tab == "Crafting/Smithing") tabsEl.SetValue(3);
+            else if (Tab == "Server") tabsEl.SetValue(4);
+            else tabsEl.SetValue(5);
 
         }
         private bool OnButtonLeftClick()
@@ -200,37 +201,39 @@ namespace scoreboard
         }
         private GuiTab[] GenerateTabs(out int currentTab)
         {
-            GuiTab[] tabs = new GuiTab[5];
+            GuiTab[] tabs = new GuiTab[6];
 
             tabs[0] = new GuiTab()
             {
                 DataInt = 0,
                 Name = "Deaths"
             };
-
             tabs[1] = new GuiTab()
             {
                 DataInt = 1,
-                Name = "Blocks"
-
+                Name = "Kills"
             };
             tabs[2] = new GuiTab()
             {
                 DataInt = 2,
-                Name = "Crafting/Smithing"
+                Name = "Blocks"
             };
             tabs[3] = new GuiTab()
             {
                 DataInt = 3,
-                Name = "Server"
+                Name = "Crafting/Smithing"
             };
             tabs[4] = new GuiTab()
             {
                 DataInt = 4,
+                Name = "Server"
+            };
+            tabs[5] = new GuiTab()
+            {
+                DataInt = 5,
                 Name = "Misc"
             };
             currentTab = 2;
-
 
             return tabs;
         }

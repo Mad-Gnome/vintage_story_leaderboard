@@ -1,4 +1,4 @@
-﻿using ProtoBuf;
+using ProtoBuf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,18 +18,21 @@ namespace scoreboard
     public class StatKilledByWolf: Leaderstat
     {
         private bool debug = false;
+        
         public StatKilledByWolf(ICoreServerAPI api) : base(api)
         {
             Title = "Died to Wolves";
             Init(GetKeyPrefix());
-            Id = "MOST_KILLED_BY_WOLVES";
+            Id = "MOST_KILLED_BY_WOLF";
             OverrideMethod = "OnEntityDeath";
+
         }
 
         public override void OverrideCB(Entity entity, DamageSource damageSource)
         {
             if (entity is not EntityPlayer) return;
             string killer = null;
+           
             if (damageSource != null)
             {
                 if (damageSource.SourceEntity == null)
@@ -38,13 +41,14 @@ namespace scoreboard
                 }
                 else
                 {
-                    killer = damageSource.SourceEntity.GetName();
+                    killer = damageSource.SourceEntity.Code.ToString();
+                    if (debug) sapi.Logger.Debug("scoreboard logline!");
+                    if (debug) sapi.Logger.Debug(damageSource.SourceEntity.GetName());
+                    if (debug) sapi.Logger.Debug(damageSource.SourceEntity.Code.ToString());
                 }
             }
-            sapi.Logger.Debug(killer);
-            List<string> animals = new List<string>
-            { "Wolf (male)", "Wolf (female)", "Wolf (pup)" };
-            if (!animals.Contains(killer)) return;
+
+            if (!killer.Contains("wolf")) return;
             string killed = entity.GetName();
             string key = GetKeyPrefix();
             int oldValue = GetOldValue(key + killed);
