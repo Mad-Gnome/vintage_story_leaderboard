@@ -98,12 +98,14 @@ namespace scoreboard
             if (config.stats["StatKilledByCapreolinae"]) leaderStats["Deaths"].Add(new StatKilledByCapreolinae(sapi));
             if (config.stats["StatKilledByCasuariidae"]) leaderStats["Deaths"].Add(new StatKilledByCasuariidae(sapi));
             if (config.stats["StatKilledByChicken"]) leaderStats["Deaths"].Add(new StatKilledByChicken(sapi));
+            if (config.stats["StatKilledByCrab"]) leaderStats["Deaths"].Add(new StatKilledByCrab(sapi));
             if (config.stats["StatKilledByDinornithidae"]) leaderStats["Deaths"].Add(new StatKilledByDinornithidae(sapi));
             if (config.stats["StatKilledByDrifter"]) leaderStats["Deaths"].Add(new StatKilledByDrifter(sapi));
             if (config.stats["StatKilledByDrowning"]) leaderStats["Deaths"].Add(new StatKilledByDrowning(sapi));
             if (config.stats["StatKilledByFallDamage"]) leaderStats["Deaths"].Add(new StatKilledByFallDamage(sapi));
             if (config.stats["StatKilledByFox"]) leaderStats["Deaths"].Add(new StatKilledByFox(sapi));
             if (config.stats["StatKilledByGoat"]) leaderStats["Deaths"].Add(new StatKilledByGoat(sapi));
+            if (config.stats["StatKilledByLivingDead"]) leaderStats["Deaths"].Add(new StatKilledByLivingDead(sapi));
             if (config.stats["StatKilledByLocust"]) leaderStats["Deaths"].Add(new StatKilledByLocust(sapi));
             if (config.stats["StatKilledByMachairodontinae"]) leaderStats["Deaths"].Add(new StatKilledByMachairodontinae(sapi));
             if (config.stats["StatKilledByManidae"]) leaderStats["Deaths"].Add(new StatKilledByManidae(sapi));
@@ -114,22 +116,26 @@ namespace scoreboard
             if (config.stats["StatKilledByRaccoon"]) leaderStats["Deaths"].Add(new StatKilledByRaccoon(sapi));
             if (config.stats["StatKilledByRhinocerotidae"]) leaderStats["Deaths"].Add(new StatKilledByRhinocerotidae(sapi));
             if (config.stats["StatKilledByShark"]) leaderStats["Deaths"].Add(new StatKilledByShark(sapi));
+            if (config.stats["StatKilledBySnake"]) leaderStats["Deaths"].Add(new StatKilledBySnake(sapi));
             if (config.stats["StatKilledByStarvation"]) leaderStats["Deaths"].Add(new StatKilledByStarvation(sapi));
             if (config.stats["StatKilledBySheep"]) leaderStats["Deaths"].Add(new StatKilledBySheep(sapi));
             if (config.stats["StatKilledByWolf"]) leaderStats["Deaths"].Add(new StatKilledByWolf(sapi));
             if (config.stats["StatKilledByPlayer"]) leaderStats["Deaths"].Add(new StatKilledByPlayer(sapi));
 
             leaderStats["Kills"] = new List<Leaderstat> { };
+            if (config.stats["StatKilledAnything"]) leaderStats["Kills"].Add(new StatKilledAnything(sapi));
             if (config.stats["StatKilledBear"]) leaderStats["Kills"].Add(new StatKilledBear(sapi));
             if (config.stats["StatKilledCaninae"]) leaderStats["Kills"].Add(new StatKilledCaninae(sapi));
             if (config.stats["StatKilledCapreolinae"]) leaderStats["Kills"].Add(new StatKilledCapreolinae(sapi));
             if (config.stats["StatKilledCasuariidae"]) leaderStats["Kills"].Add(new StatKilledCasuariidae(sapi));
             if (config.stats["StatKilledChicken"]) leaderStats["Kills"].Add(new StatKilledChicken(sapi));
+            if (config.stats["StatKilledCrab"]) leaderStats["Kills"].Add(new StatKilledCrab(sapi));
             if (config.stats["StatKilledDinornithidae"]) leaderStats["Kills"].Add(new StatKilledDinornithidae(sapi));
             if (config.stats["StatKilledDrifter"]) leaderStats["Kills"].Add(new StatKilledDrifter(sapi));
             if (config.stats["StatKilledFish"]) leaderStats["Kills"].Add(new StatKilledFish(sapi));
             if (config.stats["StatKilledFox"]) leaderStats["Kills"].Add(new StatKilledFox(sapi));
             if (config.stats["StatKilledGoat"]) leaderStats["Kills"].Add(new StatKilledGoat(sapi));
+            if (config.stats["StatKilledLivingDead"]) leaderStats["Kills"].Add(new StatKilledLivingDead(sapi));
             if (config.stats["StatKilledLocust"]) leaderStats["Kills"].Add(new StatKilledLocust(sapi));
             if (config.stats["StatKilledMachairodontinae"]) leaderStats["Kills"].Add(new StatKilledMachairodontinae(sapi));
             if (config.stats["StatKilledManidae"]) leaderStats["Kills"].Add(new StatKilledManidae(sapi));
@@ -142,6 +148,7 @@ namespace scoreboard
             if (config.stats["StatKilledRhinocerotidae"]) leaderStats["Kills"].Add(new StatKilledRhinocerotidae(sapi));
             if (config.stats["StatKilledShark"]) leaderStats["Kills"].Add(new StatKilledShark(sapi));
             if (config.stats["StatKilledSheep"]) leaderStats["Kills"].Add(new StatKilledSheep(sapi));
+            if (config.stats["StatKilledSnake"]) leaderStats["Kills"].Add(new StatKilledSnake(sapi));
             if (config.stats["StatKilledWolf"]) leaderStats["Kills"].Add(new StatKilledWolf(sapi));
 
             leaderStats["Blocks"] = new List<Leaderstat> {};

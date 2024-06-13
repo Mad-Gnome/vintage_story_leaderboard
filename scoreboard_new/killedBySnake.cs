@@ -15,15 +15,15 @@ using Vintagestory.API.Util;
 
 namespace scoreboard
 {
-    public class StatKilledByOutlaw: Leaderstat
+    public class StatKilledBySnake: Leaderstat
     {
         private bool debug = false;
         
-        public StatKilledByOutlaw(ICoreServerAPI api) : base(api)
+        public StatKilledBySnake(ICoreServerAPI api) : base(api)
         {
-            Title = "Died to Outlaws";
+            Title = "Died to Snakes";
             Init(GetKeyPrefix());
-            Id = "MOST_KILLED_BY_OUTLAW";
+            Id = "MOST_KILLED_BY_SNAKE";
             OverrideMethod = "OnEntityDeath";
 
         }
@@ -47,8 +47,7 @@ namespace scoreboard
                 }
             }
             List<string> outlaws = new List<string>
-            { "Looter", "game:dummyarrow-copper", "game:dummyrock", "game:bandit-axe", "game:bandit-knife", "game:bandit-spear", "game:deserter-archer", "game:deserter-bannerman", "game:deserter-footman", 
-                "game:hound-feral", "game:hound-hunting", "game:poacher-archer", "game:poacher-spear", "game:yeoman-archer"};
+            { "primitivesurvival:coachwhip", "primitivesurvival:blackrat", "primitivesurvival:pitviper", "primitivesurvival:chainviper"};
 
             if (!outlaws.Contains(killer)) return;
             string killed = entity.GetName();

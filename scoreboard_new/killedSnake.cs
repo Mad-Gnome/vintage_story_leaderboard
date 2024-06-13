@@ -15,26 +15,27 @@ using Vintagestory.API.Util;
 
 namespace scoreboard
 {
-    public class StatKilledWolf : Leaderstat
+    public class StatKilledSnake: Leaderstat
     {
-        private bool debug = true;
-        public StatKilledWolf(ICoreServerAPI api) : base(api)
+        private bool debug = false;
+        public StatKilledSnake(ICoreServerAPI api) : base(api)
         {
-            Title = "Most Wolves Killed";
+            Title = "Most Snakes Killed";
             Init(GetKeyPrefix());
-            Id = "MOST_WOLF_KILLED";
+            Id = "MOST_SNAKE_KILLED";
             OverrideMethod = "OnEntityDeath";
         }
 
         public override void OverrideCB(Entity entity, DamageSource damageSource)
         {
+            List<string> animals = new List<string>
+            { "primitivesurvival:coachwhip", "primitivesurvival:blackrat", "primitivesurvival:pitviper", "primitivesurvival:chainviper" };
             if (debug) sapi.Logger.Debug("scoreboard logline!");
             if (debug) sapi.Logger.Debug(entity.Code.ToString());
             if (debug) sapi.Logger.Debug(entity.GetName());
-            // Check if the entity's code contains "wolf"
-            if (!entity.Code.ToString().Contains("wolf", StringComparison.OrdinalIgnoreCase)) return;
+            //           if (debug) sapi.Logger.Debug(entity.Code.ToString());
 
-
+            if (!animals.Contains(entity.Code.ToString())) return;
             string killedByName = null;
             if (damageSource != null)
             {
@@ -44,15 +45,14 @@ namespace scoreboard
                 }
                 else
                 {
-                    if (damageSource.GetCauseEntity() is not EntityPlayer) return; // Make sure it's a player
-                    killedByName = damageSource.GetCauseEntity().GetName(); // The killer
+                    if (damageSource.GetCauseEntity() is not EntityPlayer) return; //make sure it's a player
+                    killedByName = damageSource.GetCauseEntity().GetName(); //the killer
                 }
             }
-
-            if (killedByName != null)
-            {
-                string key = GetKeyPrefix();
-                int oldValue = GetOldValue(key + killedByName); // Append player name to get old value
+            
+            if (killedByName != null) {
+                string key = GetKeyPrefix() ;
+                int oldValue = GetOldValue(key+killedByName); //append player name to getoldvalue
                 Process(key, oldValue + 1, killedByName);
             }
         }

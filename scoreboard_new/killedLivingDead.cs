@@ -15,14 +15,14 @@ using Vintagestory.API.Util;
 
 namespace scoreboard
 {
-    public class StatKilledWolf : Leaderstat
+    public class StatKilledLivingDead : Leaderstat
     {
         private bool debug = true;
-        public StatKilledWolf(ICoreServerAPI api) : base(api)
+        public StatKilledLivingDead(ICoreServerAPI api) : base(api)
         {
-            Title = "Most Wolves Killed";
+            Title = "Most Living Dead Killed";
             Init(GetKeyPrefix());
-            Id = "MOST_WOLF_KILLED";
+            Id = "MOST_LIVINGDEAD_KILLED";
             OverrideMethod = "OnEntityDeath";
         }
 
@@ -32,7 +32,7 @@ namespace scoreboard
             if (debug) sapi.Logger.Debug(entity.Code.ToString());
             if (debug) sapi.Logger.Debug(entity.GetName());
             // Check if the entity's code contains "wolf"
-            if (!entity.Code.ToString().Contains("wolf", StringComparison.OrdinalIgnoreCase)) return;
+            if (!entity.Code.ToString().Contains("livingdead", StringComparison.OrdinalIgnoreCase)) return;
 
 
             string killedByName = null;

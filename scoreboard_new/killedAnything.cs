@@ -15,26 +15,21 @@ using Vintagestory.API.Util;
 
 namespace scoreboard
 {
-    public class StatKilledWolf : Leaderstat
+    public class StatKilledAnything : Leaderstat
     {
-        private bool debug = true;
-        public StatKilledWolf(ICoreServerAPI api) : base(api)
+        private bool debug = false;
+        public StatKilledAnything(ICoreServerAPI api) : base(api)
         {
-            Title = "Most Wolves Killed";
+            Title = "Most Things Killed";
             Init(GetKeyPrefix());
-            Id = "MOST_WOLF_KILLED";
+            Id = "MOST_ANYTHING_KILLED";
             OverrideMethod = "OnEntityDeath";
         }
 
         public override void OverrideCB(Entity entity, DamageSource damageSource)
         {
-            if (debug) sapi.Logger.Debug("scoreboard logline!");
-            if (debug) sapi.Logger.Debug(entity.Code.ToString());
-            if (debug) sapi.Logger.Debug(entity.GetName());
-            // Check if the entity's code contains "wolf"
-            if (!entity.Code.ToString().Contains("wolf", StringComparison.OrdinalIgnoreCase)) return;
-
-
+            // Check if the entity's code contains "rhino"
+            if (!entity.Code.ToString().Contains(":", StringComparison.OrdinalIgnoreCase)) return;
             string killedByName = null;
             if (damageSource != null)
             {
